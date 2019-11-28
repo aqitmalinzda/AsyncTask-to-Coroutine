@@ -1,4 +1,4 @@
-Contoh penerapan Kotlin Coroutine untuk menggantikan Asynctask.
+Contoh penerapan Kotlin Coroutine untuk menggantikan AsyncTask.
 
 Jangan lupa tambahkan library coroutine yaaa.
 
