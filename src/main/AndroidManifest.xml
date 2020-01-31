@@ -16,7 +16,6 @@
             android:theme="@style/AppTheme">
         <!--suppress AndroidDomInspection -->
         <activity android:name=".SampleAct">
-
         </activity>
         <activity android:name=".SampleTwoAct">
             <intent-filter>
