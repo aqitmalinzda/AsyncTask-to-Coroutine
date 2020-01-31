@@ -3,16 +3,10 @@ package perangkaikode.com.asynctasktocoroutine
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.VideoView
+import kotlinx.android.synthetic.main.activity_sample.*
 import kotlinx.coroutines.*
 
-class MainActivity : AppCompatActivity() {
-
-    private var bt_play: Button? = null
-    private var vv_sample: VideoView? = null
-    private var pb_video: ProgressBar? = null
+class SampleAct : AppCompatActivity() {
 
     private var mTask: MyAsync? = null
     private var job: Job? = null
@@ -22,16 +16,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        bt_play = findViewById(R.id.bt_play)
-        vv_sample = findViewById(R.id.vv_sample)
-        pb_video = findViewById(R.id.pb_video)
+        setContentView(R.layout.activity_sample)
 
         bt_play?.setOnClickListener {
-            playVideo("Tulis URL Video disini")
-//            playVideoWithCoroutine("Tulis URL Video disini")
+//            playVideo("Tulis URL Video disini")
+//            playVideoWithCoroutine("")
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        job?.cancel()
     }
 
     private fun playVideoWithCoroutine(uriPath: String?){
@@ -46,29 +41,26 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun videoTask() = withContext(Dispatchers.Default){
         job = launch {
-            try{
-                vv_sample?.setOnPreparedListener {
-                    duration = vv_sample?.duration!!
-                    vv_sample?.start()
-                }
-
-                do {
-                    current = if (current != null) {
-                        vv_sample?.currentPosition
-                    } else {
-                        0
-                    }
-                    try {
-                        updateProgress((current!! * 100 / duration))
-                        if (pb_video?.progress!! >= 100) {
-                            break
-                        }
-                    } catch (e: Exception) {
-                    }
-                } while (pb_video?.progress!! <= 100)
-            } catch (e: Exception) {
-                throw RuntimeException("To catch any exception thrown for yourTask", e)
+            vv_sample?.setOnPreparedListener {
+                duration = vv_sample?.duration!!
+                vv_sample?.start()
             }
+
+            do {
+                current = if (current != null) {
+                    vv_sample?.currentPosition
+                } else {
+                    0
+                }
+                try {
+                    updateProgress((current!! * 100 / duration))
+                    if (pb_video?.progress!! >= 100) {
+                        break
+                    }
+                } catch (e: Exception) {
+                    /**/
+                }
+            } while (pb_video?.progress!! <= 100)
         }
     }
 
@@ -89,7 +81,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     inner class MyAsync : AsyncTask<Void, Int, Void>() {
-        
+
         override fun doInBackground(vararg params: Void?): Void? {
             vv_sample?.setOnPreparedListener {
                 duration = vv_sample?.duration!!
